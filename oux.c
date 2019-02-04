@@ -1,10 +1,10 @@
 #include "ft_printf.h"
 
-static char	*g_x = "0123456789abcdef";
-static char	*g_X = "0123456789ABCDEF";
-static char	*g_o = "01234567";
+//static char	*g_x = "0123456789abcdef";
+//static char	*g_X = "0123456789ABCDEF";
+//static char	*g_o = "01234567";
 
-char		*oux_attr(char *s, t_attr *attr, unsigned long long l)
+static char		*oux_attr(char *s, t_attr *attr, unsigned long long l)
 {
 	if (l < attr->prec)
 		s = ft_strjoin(fill_str(attr->prec - l, '0'), s);
@@ -17,56 +17,6 @@ char		*oux_attr(char *s, t_attr *attr, unsigned long long l)
 			s = ft_strjoin(fill_str(attr->width - ft_strlen(s), ' '), s);
 		if (find_c(attr->flags, '0'))
 			s = ft_strjoin(fill_str(attr->width - ft_strlen(s), '0'), s);
-		if (find_c(attr->flags, '#'))
-		{
-			if (l + 2 <= attr->width)
-			{
-				if (attr->conv[0] == 'x')
-				{
-					if (attr->prec && !find_c(attr->flags, '-'))
-						s = sub_str(s, "0x", hidden_c3(s, g_x) - 3);
-					if (attr->prec && find_c(attr->flags, '-'))
-						s = push_str(s, "0x");
-					if (find_c(attr->flags, '0'))
-						s = sub_str("0x", s, 0);
-				}
-				if (attr->conv[0] == 'X')
-				{
-					if (attr->prec && !find_c(attr->flags, '-'))
-						s = sub_str(s, "0X", hidden_c3(s, g_X) - 3);
-					if (attr->prec && find_c(attr->flags, '-'))
-						s = push_str(s, "0X");
-					if (find_c(attr->flags, '0'))
-						s = sub_str("0X", s, 0);
-				}
-			}
-			else if (l + 2 > attr->width)
-			{
-				if (attr->conv[0] == 'x')
-					s = ft_strjoin("0x", s);
-				if (attr->conv[0] == 'X')
-					s = ft_strjoin("0X", s);
-			}
-			if ((attr->conv[0] == 'o') && (!attr->prec && !find_c(attr->flags, '0')))
-			{				
-				if (find_c(attr->flags, '-'))
-					s = push_str(s, "0");
-				if (!find_c(attr->flags, '-'))
-					s = replace_c(s, '0', hidden_c3(s, g_o) - 2);
-			}		
-		}
-	}
-	else if (ft_strlen(s) >= attr->width)
-	{
-		if (find_c(attr->flags, '#'))
-		{
-			if (attr->conv[0] == 'x')
-				s = ft_strjoin("0x", s);
-			if (attr->conv[0] == 'X')
-				s = ft_strjoin("0X", s);
-			if ((attr->conv[0] == 'o') && !attr->prec && !find_c(attr->flags, '0'))
-				s = ft_strjoin("0", s);
-		}
 	}
 	return (s);
 }

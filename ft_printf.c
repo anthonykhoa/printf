@@ -52,16 +52,20 @@ static int	print_arg(va_list ap, const char *f, int i)
 
 	attr = malloc(sizeof(t_attr));
 	if (!set_attr(f, attr, i))
-		if (!more_checks(attr))
-		{
-			ft_memdel((void*)(&attr));
-			return (0);
-		}
+	{
+		ft_memdel((void*)(&attr));
+		return (0);
+	}
+	if (!more_checks(attr))
+	{
+		ft_memdel((void*)(&attr));
+		return (0);
+	}
 	if (attr->conv[0] == 'd' || attr->conv[0] == 'i') 
 		return (di(ap, attr));
 	if (found_u(attr->conv, g_oux))
 		return (oux(ap, attr));
-	return (1);
+	return (0);
 }
 
 int			ft_printf(const char *f, ...)

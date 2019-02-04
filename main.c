@@ -3,7 +3,7 @@
 
 int	main()
 {
-	/*long long i = -23;
+	long long i = -23;
 	ft_printf("%.5llda\n", i);
 	printf("%.5llda\n", i);
 	ft_printf("%+2lldb\n", i);
@@ -21,10 +21,20 @@ int	main()
 	ft_printf("%lldh\n", i);
 	printf("%lldh\n", i);
 	ft_printf("%-7.3lldp\n", i);
-	printf("%-7.3lldp\n", i);*/
+	printf("%-7.3lldp\n", i);
 
+	/*unsigned  long long u = 255;
+	ft_printf("%llx\n", u);
+	printf("%llx\n", u);
+	ft_printf("%llX\n", u);
+	printf("%llX\n", u);
+	ft_printf("%llo\n", u);
+	printf("%llo\n", u);
+	ft_printf("%llu\n", u);
+	printf("%llu", u);*/
+	
 	unsigned  long long u = 15;
-	ft_printf("%-.5llx\n", u);
+	ft_printf("%.5llxDINO\n", u);
 	printf("%-.5llx\n", u);
 	ft_printf("%07llX\n", u);
 	printf("%07llX\n", u);
