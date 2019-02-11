@@ -1,41 +1,22 @@
 #include "ft_printf.h"
 
-static char	*g_o = "01234567";
+//static char	*g_x = "0123456789abcdef";
+//static char	*g_X = "0123456789ABCDEF";
+//static char	*g_o = "01234567";
 
-static char	*oux_attr(char *s, t_attr *attr, unsigned long long l)
+static char		*oux_attr(char *s, t_attr *attr, unsigned long long l)
 {
 	if (l < attr->prec)
 		s = ft_strjoin(fill_str(attr->prec - l, '0'), s);
 	l = ft_strlen(s);
-	if (l < attr->width)
+	if (ft_strlen(s) < attr->width)
 	{
 		if (find_c(attr->flags, '-'))
 			s = ft_strjoin(s, fill_str(attr->width - ft_strlen(s), ' '));
+		if (!find_c(attr->flags, '-') && !find_c(attr->flags, '0'))
+			s = ft_strjoin(fill_str(attr->width - ft_strlen(s), ' '), s);
 		if (find_c(attr->flags, '0'))
 			s = ft_strjoin(fill_str(attr->width - ft_strlen(s), '0'), s);
-		if (find_c(attr->flags, '#') && (l + 2 <= attr->width)
-			&& (attr->conv[0] == 'x' || attr->conv[0] == 'X'))
-		{
-			if (find_c(attr->flags, '-'))
-				s = (attr->conv[0] == 'x') ? push_str(s, "0x")
-				: push_str(s, "0X");
-			if (find_c(attr->flags, '0'))
-				s = (attr->conv[0] == 'x') ? sub_str(s, "0x", 0)
-				: sub_str(s, "0X", 0);
-           // if (!find_c)
-            // found problem - it is that i do not have an option for not having - and 0 flags
-		}
-		if ((find_c(attr->flags, '#') && (l + 1 <= attr->width) && (attr->conv[0] == 'o')
-			&& (!attr->prec) && (!find_c(attr->flags, '0'))))
-			s = find_c(attr->flags, '-') ? push_str(s, "0") :
-			replace_c(s, '0', hidden_c3(s, g_o) - 2);
-	}
-	if ((l >= attr->width) && find_c(attr->flags, '#'))
-	{
-		(attr->conv[0] == 'x') ? (s = ft_strjoin("0x", s)) : 0;
-		(attr->conv[0] == 'X') ? (s = ft_strjoin("0X", s)) : 0;
-        if (!attr->prec)
-            (attr->conv[0] == 'o') ? (s = ft_strjoin("0", s)) : 0;
 	}
 	return (s);
 }
@@ -83,7 +64,7 @@ static char	*parse_oux(va_list ap, t_attr *attr, unsigned u)
 	return (NULL);
 }
 
-int		oux(va_list ap, t_attr *attr)
+int			oux(va_list ap, t_attr *attr)
 {
 	char		*str;
 	unsigned	u;

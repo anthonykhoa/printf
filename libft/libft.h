@@ -105,7 +105,7 @@ char				*replace_c(const char *s1, char c, unsigned long long n);
 char				*sub_str(const char *str, const char *sub, unsigned long long i);
 char				*rev_str(const char *str);
 char				*base16x(unsigned long long n);
-char				*base16X(unsigned long long n);
+char				*base16xl(unsigned long long n);
 char				*base8(unsigned long long n);
 char				*push_str(const char *str, const char *sub);
 
