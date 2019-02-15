@@ -1,34 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   base16x.c                                          :+:      :+:    :+:   */
+/*   str_chop.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anttran <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/02/02 12:48:29 by anttran           #+#    #+#             */
-/*   Updated: 2019/02/11 16:26:51 by anttran          ###   ########.fr       */
+/*   Created: 2019/02/12 17:11:42 by anttran           #+#    #+#             */
+/*   Updated: 2019/02/12 17:12:37 by anttran          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*base16x(unsigned long long n)
+char	*str_chop(char *str, int n)
 {
-	char	*str;
-	char	*x;
-	int		i;
+	char	*pork;
+	int		len;
 
-	i = 0;
-	str = malloc(30);
-	x = "0123456789abcdef";
-	if (!n)
-		return ("0");
-	while (n)
-	{
-		str[i++] = x[n & 15];
-		n = n >> 4;
-	}
-	str[i] = '\0';
-	str = rev_str(str);
-	return (str);
+	len = ft_strlen(str) - n;
+	if (len <= 0)
+		return (NULL);
+	pork = malloc(len + 1);
+	pork[len] = '\0';
+	while (len--)
+		pork[len] = str[len];
+	return (pork);
 }

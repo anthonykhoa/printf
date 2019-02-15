@@ -1,18 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   di.c                                               :+:      :+:    :+:   */
+/*   dubz.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anttran <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/02/13 10:35:18 by anttran           #+#    #+#             */
-/*   Updated: 2019/02/14 18:42:07 by anttran          ###   ########.fr       */
+/*   Created: 2019/02/13 10:39:24 by anttran           #+#    #+#             */
+/*   Updated: 2019/02/14 19:00:43 by anttran          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
 static char	*g_nums = "0123456789";
+
+static char	*prec(char *str, t_attr *attr)
+{
+	unsigned long long	l;
+	unsigned long long	s;
+
+	if (!find_c(str, '.'))
+		str = ft_strjoin(str, ft_strjoin(".", fill_str(attr->prec, '0')));
+	s = find_c(str, '.');
+	l = ft_strlen(str + s);
+	if (l < attr->prec)
+		str = ft_strjoin(str, fill_str(attr->prec - l, '0'));
+	else
+	{
+		if (str[s + attr->prec] >= '5' && str[s + attr->prec] <= '9')
+			str[s + attr->prec - 1] += 1;
+		str = str_chop(str, l - attr->prec);
+	}
+	return (str);
+}
 
 static char	*sign_options(char *str, t_attr *attr, long long i)
 {
@@ -43,15 +63,13 @@ static char	*sign_options(char *str, t_attr *attr, long long i)
 	return (str);
 }
 
-static char	*print_di(long long i, t_attr *attr)
+static char	*float_attr(char *s, t_attr *attr, long double i)
 {
-	char				*s;
-
-	s = ft_lltoa(i);
-	if (i < 0)
-		s = rem_c(s, '-');
-	if (ft_strlen(s) < attr->prec)
-		s = ft_strjoin(fill_str(attr->prec - ft_strlen(s), '0'), s);
+	if (find_c(attr->flags, '#') && !find_c(s, '.'))
+		s = ft_strjoin(s, ".");
+	if (attr->prec && ((ft_strlen(s + find_c(s, '.')) != attr->prec)
+		|| !find_c(s, '.')))
+		s = prec(s, attr);
 	if (ft_strlen(s) < attr->width)
 	{
 		if (find_c(attr->flags, '-'))
@@ -67,39 +85,27 @@ static char	*print_di(long long i, t_attr *attr)
 			? ft_strjoin(fill_str(attr->width - ft_strlen(s) - 1, '0'), s)
 			: ft_strjoin(fill_str(attr->width - ft_strlen(s), '0'), s);
 	}
-	s = ((attr->flags[0] == ' ') && !attr->flags[1]) ? ft_strjoin(" ", s) :
-		sign_options(s, attr, i);
+	s = (find_c(attr->flags, ' ') && (!attr->flags[1] || (find_c(attr->flags,
+	'#') && !attr->flags[2]))) ? ft_strjoin(" ", s) : sign_options(s, attr, i);
 	return (s);
 }
 
-static char	*parse_di(va_list ap, t_attr *attr, int d)
+int			dubz(va_list ap, t_attr *attr)
 {
-	char		hh;
-	short		h;
-	long		l;
-	long long	ll;
-
-	if (!attr->lms[0])
-		return (print_di(d = va_arg(ap, int), attr));
-	if (strequ(attr->lms, "hh"))
-		return (print_di(hh = va_arg(ap, int), attr));
-	if (strequ(attr->lms, "h"))
-		return (print_di(h = va_arg(ap, int), attr));
-	if (strequ(attr->lms, "l"))
-		return (print_di(l = va_arg(ap, long), attr));
-	return (print_di(ll = va_arg(ap, long long), attr));
-}
-
-int			di(va_list ap, t_attr *attr)
-{
-	int			d;
-	int			len;
 	char		*str;
+	double		l;
+	long double	xl;
+	int			len;
 
-	d = 0;
-	if (attr->prec && find_c(attr->flags, '0'))
-		remove_c(attr->flags, '0');
-	str = parse_di(ap, attr, d);
+	if (strequ(attr->lms, "L"))
+		xl = va_arg(ap, long double);
+	else
+		l = va_arg(ap, double);
+	xl = strequ(attr->lms, "L") ? xl : (long double)l;
+	str = ft_ldtoa(xl);
+	if (xl < 0)
+		str = rem_c(str, '-');
+	str = float_attr(str, attr, xl);
 	ft_putstr(str);
 	len = ft_strlen(str);
 	ft_strdel(&str);

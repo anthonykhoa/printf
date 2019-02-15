@@ -1,34 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   base16x.c                                          :+:      :+:    :+:   */
+/*   hidden_c4.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anttran <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/02/02 12:48:29 by anttran           #+#    #+#             */
-/*   Updated: 2019/02/11 16:26:51 by anttran          ###   ########.fr       */
+/*   Created: 2019/02/13 11:34:48 by anttran           #+#    #+#             */
+/*   Updated: 2019/02/13 11:35:01 by anttran          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-
-char	*base16x(unsigned long long n)
+int	hidden_c4(const char *s1, const char *s2, int s, int e)
 {
-	char	*str;
-	char	*x;
-	int		i;
+	int	i;
+	int	c;
 
-	i = 0;
-	str = malloc(30);
-	x = "0123456789abcdef";
-	if (!n)
-		return ("0");
-	while (n)
+	c = s;
+	while (c < e)
 	{
-		str[i++] = x[n & 15];
-		n = n >> 4;
+		i = -1;
+		while (s2[++i])
+			if (s1[c] == s2[i])
+				return (c + 1);
+		c++;
 	}
-	str[i] = '\0';
-	str = rev_str(str);
-	return (str);
+	return (0);
 }

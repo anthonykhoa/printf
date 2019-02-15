@@ -6,7 +6,7 @@
 /*   By: anttran <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/27 08:16:01 by anttran           #+#    #+#             */
-/*   Updated: 2019/02/03 17:06:32 by anttran          ###   ########.fr       */
+/*   Updated: 2019/02/13 12:47:21 by anttran          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,11 +102,16 @@ char				*insert_c(char *s1, char c, unsigned long long n);
 char				*rem_c(char *str, char c);
 int					hidden_c3(const char *s1, const char *s2);
 char				*replace_c(const char *s1, char c, unsigned long long n);
-char				*sub_str(const char *str, const char *sub, unsigned long long i);
+char				*sub_str(const char *str, const char *sub,
+					unsigned long long i);
 char				*rev_str(const char *str);
 char				*base16x(unsigned long long n);
 char				*base16xl(unsigned long long n);
 char				*base8(unsigned long long n);
 char				*push_str(const char *str, const char *sub);
+char				*ft_ldtoa(long double n);
+long double			ft_pow(long double base, long double ex);
+char				*str_chop(char *str, int n);
+int					hidden_c4(const char *s1, const char *s2, int s, int e);
 
 #endif

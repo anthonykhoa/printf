@@ -1,34 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   base16x.c                                          :+:      :+:    :+:   */
+/*   ft_pow.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anttran <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/02/02 12:48:29 by anttran           #+#    #+#             */
-/*   Updated: 2019/02/11 16:26:51 by anttran          ###   ########.fr       */
+/*   Created: 2019/02/11 19:46:35 by anttran           #+#    #+#             */
+/*   Updated: 2019/02/12 16:54:53 by anttran          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*base16x(unsigned long long n)
+long double	ft_pow(long double base, long double ex)
 {
-	char	*str;
-	char	*x;
-	int		i;
+	long double	res;
 
-	i = 0;
-	str = malloc(30);
-	x = "0123456789abcdef";
-	if (!n)
-		return ("0");
-	while (n)
-	{
-		str[i++] = x[n & 15];
-		n = n >> 4;
-	}
-	str[i] = '\0';
-	str = rev_str(str);
-	return (str);
+	res = 1;
+	while (ex-- != 0)
+		res *= base;
+	return (res);
 }

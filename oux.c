@@ -1,41 +1,43 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   oux.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anttran <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/02/13 10:37:05 by anttran           #+#    #+#             */
+/*   Updated: 2019/02/14 18:49:07 by anttran          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf.h"
 
-static char	*g_o = "01234567";
+static char	*g_x = "0123456789abcdef";
+static char	*g_xl = "0123456789ABCDEF";
 
-static char	*oux_attr(char *s, t_attr *attr, unsigned long long l)
+static char	*width(char *s, t_attr *attr, unsigned long long l)
 {
-	if (l < attr->prec)
-		s = ft_strjoin(fill_str(attr->prec - l, '0'), s);
-	l = ft_strlen(s);
-	if (l < attr->width)
+	if (find_c(attr->flags, '-'))
+		s = ft_strjoin(s, fill_str(attr->width - ft_strlen(s), ' '));
+	else if (find_c(attr->flags, '0'))
+		s = ft_strjoin(fill_str(attr->width - ft_strlen(s), '0'), s);
+	else if (!find_c(attr->flags, '-') && !find_c(attr->flags, '0'))
+		s = ft_strjoin(fill_str(attr->width - ft_strlen(s), ' '), s);
+	if ((find_c(attr->flags, '#') && (l + 1 <= attr->width) &&
+		(attr->conv[0] == 'o') && (!attr->prec) && (!find_c(attr->flags, '0'))))
+		s = find_c(attr->flags, '-') ? push_str(s, "0") :
+		replace_c(s, '0', hidden_c3(s, "01234567") - 2);
+	else if (find_c(attr->flags, '#') && (l + 2 <= attr->width)
+			&& (attr->conv[0] == 'x' || attr->conv[0] == 'X'))
 	{
 		if (find_c(attr->flags, '-'))
-			s = ft_strjoin(s, fill_str(attr->width - ft_strlen(s), ' '));
-		if (find_c(attr->flags, '0'))
-			s = ft_strjoin(fill_str(attr->width - ft_strlen(s), '0'), s);
-		if (find_c(attr->flags, '#') && (l + 2 <= attr->width)
-			&& (attr->conv[0] == 'x' || attr->conv[0] == 'X'))
-		{
-			if (find_c(attr->flags, '-'))
-				s = (attr->conv[0] == 'x') ? push_str(s, "0x")
-				: push_str(s, "0X");
-			if (find_c(attr->flags, '0'))
-				s = (attr->conv[0] == 'x') ? sub_str(s, "0x", 0)
-				: sub_str(s, "0X", 0);
-           // if (!find_c)
-            // found problem - it is that i do not have an option for not having - and 0 flags
-		}
-		if ((find_c(attr->flags, '#') && (l + 1 <= attr->width) && (attr->conv[0] == 'o')
-			&& (!attr->prec) && (!find_c(attr->flags, '0'))))
-			s = find_c(attr->flags, '-') ? push_str(s, "0") :
-			replace_c(s, '0', hidden_c3(s, g_o) - 2);
-	}
-	if ((l >= attr->width) && find_c(attr->flags, '#'))
-	{
-		(attr->conv[0] == 'x') ? (s = ft_strjoin("0x", s)) : 0;
-		(attr->conv[0] == 'X') ? (s = ft_strjoin("0X", s)) : 0;
-        if (!attr->prec)
-            (attr->conv[0] == 'o') ? (s = ft_strjoin("0", s)) : 0;
+			s = (attr->conv[0] == 'x') ? push_str(s, "0x") : push_str(s, "0X");
+		else if (find_c(attr->flags, '0'))
+			s = (attr->conv[0] == 'x') ? sub_str(s, "0x", 0)
+			: sub_str(s, "0X", 0);
+		else if (!find_c(attr->flags, '-') && !find_c(attr->flags, '0'))
+			s = (attr->conv[0] == 'x') ? sub_str(s, "0x", hidden_c3(s, g_x) - 3)
+			: sub_str(s, "0X", hidden_c3(s, g_xl) - 3);
 	}
 	return (s);
 }
@@ -43,18 +45,28 @@ static char	*oux_attr(char *s, t_attr *attr, unsigned long long l)
 static char	*print_oux(unsigned long long i, t_attr *attr)
 {
 	char				*str;
-	unsigned long long	len;
 
 	if (attr->conv[0] == 'o')
 		str = base8(i);
-	if (attr->conv[0] == 'x')
+	else if (attr->conv[0] == 'x')
 		str = base16x(i);
-	if (attr->conv[0] == 'X')
+	else if (attr->conv[0] == 'X')
 		str = base16xl(i);
-	if (attr->conv[0] == 'u')
+	else
 		str = ft_ulltoa(i);
-	len = ft_strlen(str);
-	str = oux_attr(str, attr, len);
+	if (ft_strlen(str) < attr->prec)
+		str = ft_strjoin(fill_str(attr->prec - ft_strlen(str), '0'), str);
+	if (ft_strlen(str) < attr->width)
+		str = width(str, attr, ft_strlen(str));
+	else if ((ft_strlen(str) >= attr->width) && find_c(attr->flags, '#'))
+	{
+		if (attr->conv[0] == 'x')
+			str = ft_strjoin("0x", str);
+		else if (attr->conv[0] == 'X')
+			str = ft_strjoin("0X", str);
+		else if (!attr->prec)
+			str = ft_strjoin("0", str);
+	}
 	return (str);
 }
 
@@ -65,34 +77,29 @@ static char	*parse_oux(va_list ap, t_attr *attr, unsigned u)
 	unsigned long		l;
 	unsigned long long	ll;
 
-	strequ(attr->lms, "hh") ? (hh = va_arg(ap, unsigned)) : 0;
-	strequ(attr->lms, "h") ? (h = va_arg(ap, unsigned)) : 0;
-	strequ(attr->lms, "l") ? (l = va_arg(ap, unsigned long)) : 0;
-	strequ(attr->lms, "ll") ? (ll = va_arg(ap, unsigned long long)) : 0;
-	!attr->lms[0] ? (u = va_arg(ap, unsigned)) : 0;
-	if (strequ(attr->lms, "hh"))
-		return (print_oux(hh, attr));
-	if (strequ(attr->lms, "h"))
-		return (print_oux(h, attr));
-	if (strequ(attr->lms, "l"))
-		return (print_oux(l, attr));
-	if (strequ(attr->lms, "ll"))
-		return (print_oux(ll, attr));
 	if (!attr->lms[0])
-		return (print_oux(u, attr));
-	return (NULL);
+		return (print_oux(u = va_arg(ap, unsigned), attr));
+	if (strequ(attr->lms, "hh"))
+		return (print_oux(hh = va_arg(ap, unsigned), attr));
+	if (strequ(attr->lms, "h"))
+		return (print_oux(h = va_arg(ap, unsigned), attr));
+	if (strequ(attr->lms, "l"))
+		return (print_oux(l = va_arg(ap, unsigned long), attr));
+	return (print_oux(ll = va_arg(ap, unsigned long long), attr));
 }
 
-int		oux(va_list ap, t_attr *attr)
+int			oux(va_list ap, t_attr *attr)
 {
 	char		*str;
 	unsigned	u;
+	int			len;
 
 	u = 0;
 	if (attr->prec && find_c(attr->flags, '0'))
 		remove_c(attr->flags, '0');
 	str = parse_oux(ap, attr, u);
 	ft_putstr(str);
-	g_c += ft_strlen(str);
-	return (1);
+	len = ft_strlen(str);
+	ft_strdel(&str);
+	return (len);
 }

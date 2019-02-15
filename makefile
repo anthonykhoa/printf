@@ -1,5 +1,7 @@
 woo:
+	make re
 	gcc -Werror -Wextra -Wall main.c libftprintf.a
+	./a.out
 
 NAME = libftprintf.a
 
@@ -7,7 +9,7 @@ INCLUDES = ft_printf.h
 
 DIR_O = temporary
 
-SRCS = ft_printf.c set_attr.c di.c oux.c 
+SRCS = ft_printf.c set_attr.c di.c oux.c dubz.c
 
 OBJS = $(addprefix $(DIR_O)/,$(SRCS:.c=.o))
 
@@ -25,7 +27,7 @@ $(DIR_O)/%.o: ./%.c
 
 clean:
 	make clean -C libft
-	/bin/rm -f $(OBJS)
+	rm -f $(OBJS)
 
 fclean: clean
 	make fclean -C libft
