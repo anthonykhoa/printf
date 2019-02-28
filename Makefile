@@ -1,7 +1,3 @@
-Woo:
-	gcc main.c libftprintf.a
-	./a.out
-
 NAME = libftprintf.a
 
 INCLUDES = ft_printf.h
