@@ -6,7 +6,7 @@
 /*   By: anttran <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 16:25:26 by anttran           #+#    #+#             */
-/*   Updated: 2019/02/28 09:42:06 by anttran          ###   ########.fr       */
+/*   Updated: 2019/02/28 12:21:11 by anttran          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ static char	*potato_supreme(long double n, char *first, int neg)
 	free(first);
 	if (neg)
 		n = -n;
-	first = ft_maxtoa((long long)n);
+	first = ft_lltoa((long long)n);
 	n = potato_magic(n, first, ft_strlen(first));
 	c = first[ft_strlen(first) - 1];
 	free(first);
