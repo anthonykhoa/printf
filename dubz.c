@@ -6,38 +6,38 @@
 /*   By: anttran <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 10:39:24 by anttran           #+#    #+#             */
-/*   Updated: 2019/02/24 19:53:17 by anttran          ###   ########.fr       */
+/*   Updated: 2019/02/28 11:15:01 by anttran          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static char	*g_nums = "0123465798";
-
-static char	*sign_options(char *str, t_attr attr, long double i)
+static char	*dubz_width(char *s, t_attr attr, long double i)
 {
-	if (find_c(attr.flags, '-') && i < 0)
-		str = insert_c(str, '-', hidden_c3(str, g_nums) - 1);
-	else if (find_c(attr.flags, '-') && find_c(attr.flags, '+') && i > 0)
-		str = insert_c(str, '+', hidden_c3(str, g_nums) - 1);
-	else if (find_c(attr.flags, '-') && find_c(attr.flags, ' ') && i > 0)
-		str = insert_c(str, ' ', hidden_c3(str, g_nums) - 1);
-	else if (find_c(attr.flags, '0') && i < 0)
-		str = insert_c(str, '-', hidden_c3(str, g_nums) - 1);
-	else if (find_c(attr.flags, '0') && find_c(attr.flags, '+') && i > 0)
-		str = insert_c(str, '+', hidden_c3(str, g_nums) - 1);
-	else if (find_c(attr.flags, '0') && find_c(attr.flags, ' ') && i > 0)
-		str = insert_c(str, ' ', hidden_c3(str, g_nums) - 1);
+	char	*fill;
+	char	*tmp;
+
+	tmp = s;
+	if ((find_c(attr.flags, '-')) || !find_c(attr.flags, '0'))
+	{
+		if (find_c(attr.flags, '+') || find_c(attr.flags, ' ') || i < 0)
+			fill = fill_str(attr.width - ft_strlen(tmp) - 1, ' ');
+		else
+			fill = fill_str(attr.width - ft_strlen(tmp), ' ');
+		s = (find_c(attr.flags, '-')) ? ft_strjoin(tmp, fill) :
+		ft_strjoin(fill, tmp);
+	}
 	else
 	{
-		if (i < 0)
-			str = insert_c(str, '-', hidden_c3(str, g_nums) - 1);
-		else if (find_c(attr.flags, '+'))
-			str = insert_c(str, '+', hidden_c3(str, g_nums) - 1);
+		if (find_c(attr.flags, '+') || find_c(attr.flags, ' ') || i < 0)
+			fill = fill_str(attr.width - ft_strlen(s) - 1, '0');
 		else
-			str = insert_c(str, ' ', hidden_c3(str, g_nums) - 1);
+			fill = fill_str(attr.width - ft_strlen(s), '0');
+		s = ft_strjoin(fill, tmp);
 	}
-	return (str);
+	free(tmp);
+	free(fill);
+	return (s);
 }
 
 static char	*prec2(char *str, t_attr attr)
@@ -89,7 +89,7 @@ static char	*prec(char *str, t_attr attr)
 	return (str);
 }
 
-static char	*float_attr(char *s, t_attr attr, long double i)
+static char	*dubz_attr(char *s, t_attr attr, long double i)
 {
 	char	*tmp;
 
@@ -112,7 +112,7 @@ static char	*float_attr(char *s, t_attr attr, long double i)
 		free(tmp);
 	}
 	else if (find_c(attr.flags, '+') || find_c(attr.flags, ' ') || i < 0)
-		s = sign_options(s, attr, i);
+		s = dubz_signs(s, attr, i);
 	return (s);
 }
 
@@ -138,8 +138,8 @@ int			dubz(va_list ap, const char *f, int i)
 	str = potato(xl);
 	if (xl < 0)
 		str = rem_c(str, '-');
-	str = float_attr(str, bah, xl);
-	ft_putstr(str);
+	str = dubz_attr(str, bah, xl);
+	ft_putstr_fd(str, g_fd);
 	xl = ft_strlen(str);
 	free(str);
 	return (xl);

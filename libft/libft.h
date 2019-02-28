@@ -6,15 +6,15 @@
 /*   By: anttran <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/27 08:16:01 by anttran           #+#    #+#             */
-/*   Updated: 2019/02/24 11:06:48 by anttran          ###   ########.fr       */
+/*   Updated: 2019/02/28 11:04:31 by anttran          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
-# include <string.h>
 # include <unistd.h>
 # include <stdlib.h>
+# include <stdint.h>
 
 typedef struct		s_list
 {
@@ -92,21 +92,23 @@ unsigned long long	ft_atoull(const char *str);
 long long			ft_atoll(const char *str);
 char				*ft_lltoa(long long n);
 char				*ft_ulltoa(unsigned long long n);
+char				*ft_maxtoa(intmax_t n);
+char				*ft_umaxtoa(uintmax_t n);
 int					find_c(const char *str, char c);
 int					match(const char *s1, const char *s2, int s, int e);
 int					strequ(const char *s1, const char *s2);
 void				remove_c(char str[], char c);
 int					found_u(char *s1, char *s2);
-char				*fill_str(unsigned long long n, char c);
+char				*fill_str(uintmax_t n, char c);
 char				*insert_c(char *s1, char c, unsigned long long n);
 char				*rem_c(char *str, char c);
 int					hidden_c3(const char *s1, const char *s2);
 char				*replace_c(char *s1, char c, unsigned long long n);
 char				*sub_str(char *str, char *sub, unsigned long long i);
 char				*rev_str(const char *str);
-char				*base16x(unsigned long long n);
-char				*base16xl(unsigned long long n);
-char				*base8(unsigned long long n);
+char				*base16x(uintmax_t n);
+char				*base16xl(uintmax_t n);
+char				*base8(uintmax_t n);
 char				*push_str(char *str, char *sub);
 char				*potato(long double n);
 long double			ft_pow(long double base, long double ex);

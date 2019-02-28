@@ -6,7 +6,7 @@
 /*   By: anttran <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/20 08:36:50 by anttran           #+#    #+#             */
-/*   Updated: 2019/02/20 08:49:33 by anttran          ###   ########.fr       */
+/*   Updated: 2019/02/27 19:05:21 by anttran          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static char	*g_o = "01234567";
 static char	*g_x = "0123456789abcdef";
 static char	*g_xl = "0123456789ABCDEF";
 
-char	*oux_whash(char *s, t_attr attr, unsigned long long l)
+char	*oux_whash(char *s, t_attr attr, size_t l)
 {
 	if ((l + 2 <= attr.width) && (attr.conv[0] == 'x' || attr.conv[0] == 'X'))
 	{

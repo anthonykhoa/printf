@@ -6,7 +6,7 @@
 /*   By: anttran <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 16:30:34 by anttran           #+#    #+#             */
-/*   Updated: 2019/02/27 11:10:33 by anttran          ###   ########.fr       */
+/*   Updated: 2019/02/28 11:15:20 by anttran          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ static char	*ops(char *str, t_attr attr, size_t len)
 
 static char	*parse_csp(char c, va_list ap)
 {
-    char    *str;
-    char    *tmp;
-    
+	char	*str;
+	char	*tmp;
+
 	if (c == 's')
 	{
 		if (!(str = va_arg(ap, char*)))
@@ -73,7 +73,7 @@ int			csp(va_list ap, const char *f, int i)
 	bah = set_attr(f, i);
 	str = parse_csp(bah.conv[0], ap);
 	str = ops(str, bah, ft_strlen(str));
-	ft_putstr(str);
+	ft_putstr_fd(str, g_fd);
 	len = ft_strlen(str);
 	free(str);
 	return (len);

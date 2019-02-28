@@ -6,7 +6,7 @@
 /*   By: anttran <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 10:29:56 by anttran           #+#    #+#             */
-/*   Updated: 2019/02/27 11:23:38 by anttran          ###   ########.fr       */
+/*   Updated: 2019/02/27 19:30:37 by anttran          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ static t_attr	l(const char *f, t_attr attr, int i, int conv)
 	int	s;
 	int	e;
 
-	if ((s = hidden_c(f, "hlL", i, conv)))
+	if ((s = hidden_c(f, "hlLzj", i, conv)))
 	{
-		e = hidden_c2(f, "hlL", i, conv);
+		e = hidden_c2(f, "hlLzj", i, conv);
 		attr.lms[0] = f[s];
 		attr.lms[1] = (e == s + 1) ? f[s] : '\0';
 		if (e == s + 1)

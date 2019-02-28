@@ -6,13 +6,13 @@
 /*   By: anttran <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/02 12:50:54 by anttran           #+#    #+#             */
-/*   Updated: 2019/02/24 12:50:35 by anttran          ###   ########.fr       */
+/*   Updated: 2019/02/27 18:21:25 by anttran          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*base8(unsigned long long n)
+char	*base8(uintmax_t n)
 {
 	char	*str;
 	char	*tmp;

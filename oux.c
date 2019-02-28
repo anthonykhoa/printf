@@ -6,24 +6,22 @@
 /*   By: anttran <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 10:37:05 by anttran           #+#    #+#             */
-/*   Updated: 2019/02/27 15:22:06 by anttran          ###   ########.fr       */
+/*   Updated: 2019/02/28 11:14:44 by anttran          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static char	*hash(char *str, t_attr attr, unsigned long long l)
+static char	*hash(char *str, t_attr attr, uintmax_t n)
 {
 	char	*tmp;
 	int		i;
 
 	i = 0;
 	tmp = str;
-	if (!attr.prec && !l && attr.sp && attr.conv[0] != 'o')
-		return (str);
-	if (attr.conv[0] == 'x' && l)
+	if (attr.conv[0] == 'x' && n)
 		str = ft_strjoin("0x", tmp + i++);
-	else if (attr.conv[0] == 'X' && l)
+	else if (attr.conv[0] == 'X' && n)
 		str = ft_strjoin("0X", tmp + i++);
 	else if (!attr.prec && attr.conv[0] == 'o' && str[0] != '0')
 		str = ft_strjoin("0", tmp + i++);
@@ -32,7 +30,7 @@ static char	*hash(char *str, t_attr attr, unsigned long long l)
 	return (str);
 }
 
-static char	*width(char *s, t_attr attr, unsigned long long l)
+static char	*width(char *s, t_attr attr, size_t l)
 {
 	char	*tmp;
 	char	*fill;
@@ -59,16 +57,11 @@ static char	*width(char *s, t_attr attr, unsigned long long l)
 	return (s);
 }
 
-static char	*print_oux(unsigned long long i, t_attr attr)
+static char	*print_oux(char *str, uintmax_t i, t_attr attr)
 {
-	char	*str;
-	char	*tmp;
 	char	*fill;
+	char	*tmp;
 
-	(attr.conv[0] == 'o') ? str = base8(i) : 0;
-	(attr.conv[0] == 'x') ? str = base16x(i) : 0;
-	(attr.conv[0] == 'X') ? str = base16xl(i) : 0;
-	(attr.conv[0] == 'u') ? str = ft_ulltoa(i) : 0;
 	if (!i && !attr.prec && attr.sp)
 	{
 		free(str);
@@ -89,32 +82,43 @@ static char	*print_oux(unsigned long long i, t_attr attr)
 	return (str);
 }
 
-static char	*parse_oux(va_list ap, t_attr attr, unsigned u)
+static char	*parse_oux(va_list ap, t_attr attr, uintmax_t j)
 {
-	unsigned char		hh;
-	unsigned short		h;
-	unsigned long		l;
-	unsigned long long	ll;
+	char	*str;
 
 	if (!attr.lms[0])
-		return (print_oux(u = va_arg(ap, unsigned), attr));
-	if (strequ(attr.lms, "hh"))
-		return (print_oux(hh = va_arg(ap, unsigned), attr));
-	if (strequ(attr.lms, "h"))
-		return (print_oux(h = va_arg(ap, unsigned), attr));
-	if (strequ(attr.lms, "l"))
-		return (print_oux(l = va_arg(ap, unsigned long), attr));
-	return (print_oux(ll = va_arg(ap, unsigned long long), attr));
+		j = (unsigned int)va_arg(ap, unsigned);
+	else if (strequ(attr.lms, "hh"))
+		j = (unsigned char)va_arg(ap, unsigned);
+	else if (strequ(attr.lms, "h"))
+		j = (unsigned short)va_arg(ap, unsigned);
+	else if (strequ(attr.lms, "l"))
+		j = (unsigned long)va_arg(ap, unsigned long);
+	else if (strequ(attr.lms, "ll"))
+		j = (unsigned long long)va_arg(ap, unsigned long long);
+	else if (attr.lms[0] == 'z')
+		j = (size_t)va_arg(ap, size_t);
+	else
+		j = va_arg(ap, uintmax_t);
+	if (attr.conv[0] == 'o')
+		str = base8(j);
+	else if (attr.conv[0] == 'x')
+		str = base16x(j);
+	else if (attr.conv[0] == 'X')
+		str = base16xl(j);
+	else
+		str = ft_umaxtoa(j);
+	return (print_oux(str, j, attr));
 }
 
 int			oux(va_list ap, const char *f, int i)
 {
 	char		*str;
-	unsigned	u;
 	int			len;
 	t_attr		bah;
+	uintmax_t	j;
 
-	u = 0;
+	j = 0;
 	bah = set_attr(f, i);
 	if (bah.prec && find_c(bah.flags, '0'))
 		remove_c(bah.flags, '0');
@@ -125,8 +129,8 @@ int			oux(va_list ap, const char *f, int i)
 		bah.lms[0] = 'l';
 		bah.lms[1] = '\0';
 	}
-	str = parse_oux(ap, bah, u);
-	ft_putstr(str);
+	str = parse_oux(ap, bah, j);
+	ft_putstr_fd(str, g_fd);
 	len = ft_strlen(str);
 	free(str);
 	return (len);

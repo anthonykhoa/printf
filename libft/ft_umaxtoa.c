@@ -1,37 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   base16x.c                                          :+:      :+:    :+:   */
+/*   ft_umaxtoa.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anttran <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/02/02 12:48:29 by anttran           #+#    #+#             */
-/*   Updated: 2019/02/27 18:21:00 by anttran          ###   ########.fr       */
+/*   Created: 2019/02/27 18:12:44 by anttran           #+#    #+#             */
+/*   Updated: 2019/02/27 18:23:31 by anttran          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*base16x(uintmax_t n)
+char	*ft_umaxtoa(uintmax_t n)
 {
 	char	*str;
-	char	*x;
-	char	*tmp;
+	char	*t;
+	char	*u;
 	int		i;
 
-	i = 0;
-	if (!n)
-		return (ft_strdup("0"));
-	str = malloc(30);
-	x = "0123456789abcdef";
-	while (n)
+	if (!(str = (char *)malloc(30)))
+		return (NULL);
+	t = str;
+	if (n > 9)
 	{
-		str[i++] = x[n & 15];
-		n = n >> 4;
+		i = 0;
+		u = ft_umaxtoa(n / 10);
+		while (u[i])
+			*t++ = u[i++];
+		free(u);
 	}
-	str[i] = '\0';
-	tmp = str;
-	str = rev_str(tmp);
-	free(tmp);
+	*t = '0' + n % 10;
+	*(t + 1) = '\0';
 	return (str);
 }

@@ -6,13 +6,13 @@
 /*   By: anttran <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/31 10:01:56 by anttran           #+#    #+#             */
-/*   Updated: 2019/01/31 10:30:27 by anttran          ###   ########.fr       */
+/*   Updated: 2019/02/27 18:22:49 by anttran          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*fill_str(unsigned long long n, char c)
+char	*fill_str(uintmax_t n, char c)
 {
 	char	*str;
 

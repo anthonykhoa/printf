@@ -6,7 +6,7 @@
 /*   By: anttran <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 10:33:30 by anttran           #+#    #+#             */
-/*   Updated: 2019/02/27 11:23:27 by anttran          ###   ########.fr       */
+/*   Updated: 2019/02/28 11:55:19 by anttran          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ static int	colors(const char *f, int i)
 	g_c++;
 	ft_putchar('{');
 	g_p = i + 1;
+	if (f[++i] == '{')
+		return (colors(f, i));
 	return (0);
 }
 
@@ -100,22 +102,42 @@ static int	print_arg(va_list ap, const char *f, int i)
 	return (1);
 }
 
+int			ft_fprintf(int fd, const char *f, ...)
+{
+	int		i;
+	va_list	ap;
+
+	i = 0;
+	g_fd = fd;
+	va_start(ap, f);
+	while (f[i])
+	{
+		if (f[i] == '%' && print_arg(ap, f, ++i))
+			i = hidden_c4(f, "cspfFdDioOuUxX%", i, ft_strlen(f));
+		else
+		{
+			ft_putchar_fd(f[i++], fd);
+			g_c++;
+		}
+	}
+	va_end(ap);
+	return (f[i] ? -1 : g_c);
+}
+
 int			ft_printf(const char *f, ...)
 {
 	int		i;
 	va_list	ap;
 
 	i = 0;
+	g_fd = 1;
 	va_start(ap, f);
 	while (f[i])
 	{
 		if ((f[i] == '{') && !(i = colors(f, i)))
 			i = g_p;
-		if (f[i] == '%')
-		{
-			print_arg(ap, f, ++i);
+		if ((f[i] == '%') && print_arg(ap, f, ++i))
 			i = hidden_c4(f, "cspfFdDioOuUxX%", i, ft_strlen(f));
-		}
 		else
 		{
 			ft_putchar(f[i++]);
