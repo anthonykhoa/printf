@@ -12,7 +12,7 @@
 
 #include "ft_printf.h"
 
-static char	*dubz_width(char *s, t_attr attr, long double i)
+static char	*dubz_width(char *s, t_attr attr, long double n)
 {
 	char	*fill;
 	char	*tmp;
@@ -20,7 +20,7 @@ static char	*dubz_width(char *s, t_attr attr, long double i)
 	tmp = s;
 	if ((find_c(attr.flags, '-')) || !find_c(attr.flags, '0'))
 	{
-		if (find_c(attr.flags, '+') || find_c(attr.flags, ' ') || i < 0)
+		if (find_c(attr.flags, '+') || find_c(attr.flags, ' ') || n < 0)
 			fill = fill_str(attr.width - ft_strlen(tmp) - 1, ' ');
 		else
 			fill = fill_str(attr.width - ft_strlen(tmp), ' ');
@@ -29,7 +29,7 @@ static char	*dubz_width(char *s, t_attr attr, long double i)
 	}
 	else
 	{
-		if (find_c(attr.flags, '+') || find_c(attr.flags, ' ') || i < 0)
+		if (find_c(attr.flags, '+') || find_c(attr.flags, ' ') || n < 0)
 			fill = fill_str(attr.width - ft_strlen(s) - 1, '0');
 		else
 			fill = fill_str(attr.width - ft_strlen(s), '0');
@@ -89,31 +89,31 @@ static char	*prec(char *str, t_attr attr)
 	return (str);
 }
 
-static char	*dubz_attr(char *s, t_attr attr, long double i)
+static char	*dubz_attr(char *str, t_attr attr, long double n)
 {
 	char	*tmp;
 
-	if (find_c(attr.flags, '#') && !find_c(s, '.'))
+	if (find_c(attr.flags, '#') && !find_c(str, '.'))
 	{
-		tmp = s;
-		s = ft_strjoin(tmp, ".");
+		tmp = str;
+		str = ft_strjoin(tmp, ".");
 		free(tmp);
 	}
-	if (attr.prec && ((ft_strlen(s + find_c(s, '.')) != attr.prec)
-		|| !find_c(s, '.')))
-		s = prec(s, attr);
-	if (ft_strlen(s) < attr.width)
-		s = dubz_width(s, attr, i);
+	if (attr.prec && ((ft_strlen(str + find_c(str, '.')) != attr.prec)
+		|| !find_c(str, '.')))
+		str = prec(str, attr);
+	if (ft_strlen(str) < attr.width)
+		str = dubz_width(str, attr, n);
 	if (find_c(attr.flags, ' ') && (!attr.flags[1] || (find_c(attr.flags,
 		'#') && !attr.flags[2])))
 	{
-		tmp = s;
-		s = ft_strjoin(" ", tmp);
+		tmp = str;
+		str = ft_strjoin(" ", tmp);
 		free(tmp);
 	}
-	else if (find_c(attr.flags, '+') || find_c(attr.flags, ' ') || i < 0)
-		s = dubz_signs(s, attr, i);
-	return (s);
+	else if (find_c(attr.flags, '+') || find_c(attr.flags, ' ') || n < 0)
+		str = dubz_signs(str, attr, n);
+	return (str);
 }
 
 int			dubz(va_list ap, const char *f, int i)
@@ -134,7 +134,7 @@ int			dubz(va_list ap, const char *f, int i)
 		xl = va_arg(ap, long double);
 	else
 		l = va_arg(ap, double);
-	xl = strequ(bah.lms, "L") ? xl : (long double)l;
+	xl = strequ(bah.lms, "L") ? xl : l;
 	str = potato(xl);
 	if (xl < 0)
 		str = rem_c(str, '-');

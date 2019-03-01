@@ -6,7 +6,7 @@
 /*   By: anttran <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 16:25:26 by anttran           #+#    #+#             */
-/*   Updated: 2019/02/28 12:21:11 by anttran          ###   ########.fr       */
+/*   Updated: 2019/02/28 18:43:58 by anttran          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,8 @@ static char	*mighty_potato(long double n, char *first, size_t len, int neg)
 	char	*str;
 	char	*tmp;
 
-	(n < 0) ? n = -n : 0;
+	if (n < 0)
+		n = -n;
 	str = round_potato(n);
 	if (str[0] == 'P')
 	{

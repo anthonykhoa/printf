@@ -30,39 +30,39 @@ static char	*hash(char *str, t_attr attr, uintmax_t n)
 	return (str);
 }
 
-static char	*width(char *s, t_attr attr, size_t l)
+static char	*width(char *str, t_attr attr, size_t l)
 {
 	char	*tmp;
 	char	*fill;
 
 	if (find_c(attr.flags, '-') || !find_c(attr.flags, '0'))
 	{
-		tmp = s;
-		fill = fill_str(attr.width - ft_strlen(s), ' ');
+		tmp = str;
+		fill = fill_str(attr.width - ft_strlen(str), ' ');
 		if (find_c(attr.flags, '-'))
-			s = ft_strjoin(tmp, fill);
+			str = ft_strjoin(tmp, fill);
 		else
-			s = ft_strjoin(fill, tmp);
+			str = ft_strjoin(fill, tmp);
 	}
 	else
 	{
-		tmp = s;
-		fill = fill_str(attr.width - ft_strlen(s), '0');
-		s = ft_strjoin(fill, tmp);
+		tmp = str;
+		fill = fill_str(attr.width - ft_strlen(str), '0');
+		str = ft_strjoin(fill, tmp);
 	}
 	free(tmp);
 	free(fill);
 	if (find_c(attr.flags, '#'))
-		s = oux_whash(s, attr, l);
-	return (s);
+		str = oux_whash(str, attr, l);
+	return (str);
 }
 
-static char	*print_oux(char *str, uintmax_t i, t_attr attr)
+static char	*print_oux(char *str, uintmax_t n, t_attr attr)
 {
 	char	*fill;
 	char	*tmp;
 
-	if (!i && !attr.prec && attr.sp)
+	if (!n && !attr.prec && attr.sp)
 	{
 		free(str);
 		str = ft_strdup("");
@@ -78,37 +78,37 @@ static char	*print_oux(char *str, uintmax_t i, t_attr attr)
 	if (ft_strlen(str) < attr.width)
 		str = width(str, attr, ft_strlen(str));
 	else if ((ft_strlen(str) >= attr.width) && find_c(attr.flags, '#'))
-		str = hash(str, attr, i);
+		str = hash(str, attr, n);
 	return (str);
 }
 
-static char	*parse_oux(va_list ap, t_attr attr, uintmax_t j)
+static char	*parse_oux(va_list ap, t_attr attr, uintmax_t n)
 {
 	char	*str;
 
 	if (!attr.lms[0])
-		j = (unsigned int)va_arg(ap, unsigned);
+		n = va_arg(ap, unsigned);
 	else if (strequ(attr.lms, "hh"))
-		j = (unsigned char)va_arg(ap, unsigned);
+		n = (unsigned char)va_arg(ap, unsigned);
 	else if (strequ(attr.lms, "h"))
-		j = (unsigned short)va_arg(ap, unsigned);
+		n = (unsigned short)va_arg(ap, unsigned);
 	else if (strequ(attr.lms, "l"))
-		j = (unsigned long)va_arg(ap, unsigned long);
+		n = va_arg(ap, unsigned long);
 	else if (strequ(attr.lms, "ll"))
-		j = (unsigned long long)va_arg(ap, unsigned long long);
+		n = va_arg(ap, unsigned long long);
 	else if (attr.lms[0] == 'z')
-		j = (size_t)va_arg(ap, size_t);
+		n = va_arg(ap, size_t);
 	else
-		j = va_arg(ap, uintmax_t);
+		n = va_arg(ap, uintmax_t);
 	if (attr.conv[0] == 'o')
-		str = base8(j);
+		str = base8(n);
 	else if (attr.conv[0] == 'x')
-		str = base16x(j);
+		str = base16x(n);
 	else if (attr.conv[0] == 'X')
-		str = base16xl(j);
+		str = base16xl(n);
 	else
-		str = ft_umaxtoa(j);
-	return (print_oux(str, j, attr));
+		str = ft_umaxtoa(n);
+	return (print_oux(str, n, attr));
 }
 
 int			oux(va_list ap, const char *f, int i)
@@ -116,9 +116,9 @@ int			oux(va_list ap, const char *f, int i)
 	char		*str;
 	int			len;
 	t_attr		bah;
-	uintmax_t	j;
+	uintmax_t	n;
 
-	j = 0;
+	n = 0;
 	bah = set_attr(f, i);
 	if (bah.prec && find_c(bah.flags, '0'))
 		remove_c(bah.flags, '0');
@@ -129,7 +129,7 @@ int			oux(va_list ap, const char *f, int i)
 		bah.lms[0] = 'l';
 		bah.lms[1] = '\0';
 	}
-	str = parse_oux(ap, bah, j);
+	str = parse_oux(ap, bah, n);
 	ft_putstr_fd(str, g_fd);
 	len = ft_strlen(str);
 	free(str);

@@ -101,17 +101,17 @@ static char	*parse_di(va_list ap, t_attr attr, intmax_t n)
 	char	*str;
 
 	if (!attr.lms[0])
-		n = (int)va_arg(ap, int);
+		n = va_arg(ap, int);
 	else if (strequ(attr.lms, "hh"))
 		n = (char)va_arg(ap, int);
 	else if (strequ(attr.lms, "h"))
 		n = (short)va_arg(ap, int);
 	else if (strequ(attr.lms, "l"))
-		n = (long)va_arg(ap, long);
+		n = va_arg(ap, long);
 	else if (strequ(attr.lms, "ll"))
-		n = (long long)va_arg(ap, long long);
+		n = va_arg(ap, long long);
 	else if (attr.lms[0] == 'z')
-		n = (ssize_t)va_arg(ap, ssize_t);
+		n = va_arg(ap, ssize_t);
 	else
 		n = va_arg(ap, intmax_t);
 	str = (!n && !attr.prec && attr.sp) ? ft_strdup("") : ft_maxtoa(n);
