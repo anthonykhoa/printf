@@ -12,7 +12,7 @@
 
 #include "ft_printf.h"
 
-static t_attr	l(const char *f, t_attr attr, int i, int conv)
+static t_attr	lm(const char *f, t_attr attr, int i, int conv)
 {
 	int	s;
 	int	e;
@@ -30,7 +30,7 @@ static t_attr	l(const char *f, t_attr attr, int i, int conv)
 	return (attr);
 }
 
-static t_attr	p(const char *f, t_attr attr, int i, int conv)
+static t_attr	precision(const char *f, t_attr attr, int i, int conv)
 {
 	if (f[i] == '.')
 	{
@@ -48,10 +48,10 @@ static t_attr	p(const char *f, t_attr attr, int i, int conv)
 		attr.prec = 0;
 		attr.sp = 0;
 	}
-	return (l(f, attr, i, conv));
+	return (lm(f, attr, i, conv));
 }
 
-static t_attr	w(const char *f, t_attr attr, int i, int conv)
+static t_attr	width(const char *f, t_attr attr, int i, int conv)
 {
 	while (find_c("0#+- ", f[i]))
 		i++;
@@ -61,10 +61,10 @@ static t_attr	w(const char *f, t_attr attr, int i, int conv)
 		attr.width = 0;
 	while (ft_isdigit(f[i]))
 		i++;
-	return (p(f, attr, i, conv));
+	return (precision(f, attr, i, conv));
 }
 
-static t_attr	fl(const char *f, t_attr attr, int i, int conv)
+static t_attr	flags(const char *f, t_attr attr, int i, int conv)
 {
 	int	e;
 	int	c;
@@ -89,7 +89,7 @@ static t_attr	fl(const char *f, t_attr attr, int i, int conv)
 		attr.flags[0] = '\0';
 	else
 		attr.flags[c] = '\0';
-	return (w(f, attr, i, conv));
+	return (width(f, attr, i, conv));
 }
 
 t_attr			set_attr(const char *f, int i)
@@ -100,5 +100,5 @@ t_attr			set_attr(const char *f, int i)
 	conv = hidden_c(f, "cspfFdDioOuUxX%", i, ft_strlen(f));
 	attr.conv[0] = f[conv];
 	attr.conv[1] = '\0';
-	return (fl(f, attr, i, conv));
+	return (flags(f, attr, i, conv));
 }
