@@ -6,7 +6,7 @@
 /*   By: anttran <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/20 08:36:50 by anttran           #+#    #+#             */
-/*   Updated: 2019/03/01 13:49:48 by anttran          ###   ########.fr       */
+/*   Updated: 2019/03/01 17:34:12 by anttran          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*oux_whash(char *s, t_attr attr, size_t l)
 			s = attr.conv[0] == 'x' ? push_str(s, "0x") : push_str(s, "0X");
 		else if (find_c(attr.flags, '0'))
 			s = attr.conv[0] == 'x' ? sub_str(s, "0x", 0) : sub_str(s, "0X", 0);
-		else if (!find_c(attr.flags, '-') && !find_c(attr.flags, '0'))
+		else 
 		{
 			s = (attr.conv[0] == 'x') ? sub_str(s, "0x", hidden_c3(s, g_x) - 3)
 			: sub_str(s, "0X", hidden_c3(s, g_xl) - 3);
