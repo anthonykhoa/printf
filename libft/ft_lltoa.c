@@ -17,7 +17,6 @@ char	*ft_lltoa(long long n)
 	char	*str;
 	char	*t;
 	char	*u;
-	char	*tmp;
 	int		i;
 
 	str = malloc(30);
@@ -36,7 +35,5 @@ char	*ft_lltoa(long long n)
 	}
 	*t = '0' - n % 10;
 	*(t + 1) = '\0';
-	tmp = ft_strdup(str);
-	free(str);
-	return (tmp);
+	return (str);
 }

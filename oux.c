@@ -124,7 +124,7 @@ int			oux(va_list ap, const char *f, int i)
 		remove_c(bah.flags, '0');
 	if (find_c(bah.flags, '-') && find_c(bah.flags, '0'))
 		remove_c(bah.flags, '0');
-	if (bah.lms[0] != 'l' && (bah.conv[0] == 'U' || bah.conv[0] == 'O'))
+	if (!strequ(bah.lms, "l") && (bah.conv[0] == 'U' || bah.conv[0] == 'O'))
 	{
 		bah.lms[0] = 'l';
 		bah.lms[1] = '\0';

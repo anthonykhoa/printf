@@ -6,7 +6,7 @@
 /*   By: anttran <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/20 08:36:50 by anttran           #+#    #+#             */
-/*   Updated: 2019/02/27 19:05:21 by anttran          ###   ########.fr       */
+/*   Updated: 2019/03/01 13:49:48 by anttran          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,8 @@ char	*oux_whash(char *s, t_attr attr, size_t l)
 			s = attr.conv[0] == 'x' ? sub_str(s, "0x", 0) : sub_str(s, "0X", 0);
 		else if (!find_c(attr.flags, '-') && !find_c(attr.flags, '0'))
 		{
-			if (attr.conv[0] == 'x')
-				s = sub_str(s, "0x", hidden_c3(s, g_x) - 3);
-			else
-				s = sub_str(s, "0X", hidden_c3(s, g_xl) - 3);
+			s = (attr.conv[0] == 'x') ? sub_str(s, "0x", hidden_c3(s, g_x) - 3)
+			: sub_str(s, "0X", hidden_c3(s, g_xl) - 3);
 		}
 	}
 	else if ((l + 1 <= attr.width) && (attr.conv[0] == 'o')
@@ -38,7 +36,10 @@ char	*oux_whash(char *s, t_attr attr, size_t l)
 		if (find_c(attr.flags, '-'))
 			s = push_str(s, "0");
 		else
-			s = replace_c(s, '0', hidden_c3(s, g_o) - 2);
+		{
+			s = find_c(g_o, s[ft_strlen(s) - 1]) ? replace_c(s, '0',
+			hidden_c3(s, g_o) - 2) : replace_c(s, '0', ft_strlen(s) - 1);
+		}
 	}
 	return (s);
 }

@@ -51,12 +51,12 @@ static char	*parse_csp(char c, va_list ap)
 	}
 	else if (c == 'c')
 	{
-		str = ft_memalloc(2);
+		str = (char*)ft_memalloc(2);
 		str[0] = va_arg(ap, int);
 	}
 	else
 	{
-		str = base16x((unsigned long long)va_arg(ap, void*));
+		str = base16x((uintmax_t)va_arg(ap, void*));
 		tmp = str;
 		str = ft_strjoin("0x", tmp);
 		free(tmp);
