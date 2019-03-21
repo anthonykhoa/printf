@@ -51,7 +51,7 @@ static char	*parse_csp(char c, va_list ap)
 	}
 	else if (c == 'c')
 	{
-		str = (char*)ft_memalloc(2);
+		str = ft_memalloc(2);
 		str[0] = va_arg(ap, int);
 	}
 	else

@@ -6,7 +6,7 @@
 /*   By: anttran <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/13 10:33:30 by anttran           #+#    #+#             */
-/*   Updated: 2019/03/01 14:34:59 by anttran          ###   ########.fr       */
+/*   Updated: 2019/02/28 11:55:19 by anttran          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,13 @@ static int	colors(const char *f, int i)
 		if (ft_strnequ(f + i, g_colors[c].key, 4))
 		{
 			if (g_r)
-				ft_putstr_fd("\033[0m", 1);
+				ft_putstr("\033[0m");
 			g_r = 1;
-			ft_putstr_fd(g_colors[c].value, 1);
+			ft_putstr(g_colors[c].value);
 			return (i += 4);
 		}
 	g_c++;
-	ft_putchar_fd('{', 1);
+	ft_putchar('{');
 	g_p = i + 1;
 	if (f[++i] == '{')
 		return (colors(f, i));
@@ -77,7 +77,7 @@ static int	perc(const char *f, int i)
 	}
 	else
 		str = ft_strdup("%");
-	ft_putstr_fd(str, g_fd);
+	ft_putstr(str);
 	len = ft_strlen(str);
 	free(str);
 	return (len);
@@ -140,12 +140,12 @@ int			ft_printf(const char *f, ...)
 			i = hidden_c4(f, "cspfFdDioOuUxX%", i, ft_strlen(f));
 		else
 		{
-			ft_putchar_fd(f[i++], 1);
+			ft_putchar(f[i++]);
 			g_c++;
 		}
 	}
 	if (g_r)
-		ft_putstr_fd("\033[0m", 1);
+		ft_putstr("\033[0m");
 	va_end(ap);
 	return (f[i] ? -1 : g_c);
 }
